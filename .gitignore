@@ -1,0 +1,10 @@
+﻿# Dev / reference assets
+reference/
+Screens_feedo/
+content.md/
+styles.md/
+.claude/
+
+# OS
+.DS_Store
+Thumbs.db
