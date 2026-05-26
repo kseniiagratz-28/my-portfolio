@@ -93,18 +93,20 @@
       white-space: nowrap;
       transition: background 0.18s, color 0.18s;
     }
-    /* Active = dark fill, wide pill (exactly Oncy) */
-    .nav-links li a.active,
+    /* Hover: slight bg */
     .nav-links li a:hover {
+      background: rgba(0,16,48,0.06);
+    }
+    /* Active = dark pill, Oncy-wide (min-width forces same width as Oncy reference) */
+    .nav-links li a.active {
       background: var(--outer);
       color: var(--white);
       border-color: var(--outer);
-    }
-    .nav-links li a.active {
-      padding-left: 42px;
-      padding-right: 42px;
+      min-width: 160px;
+      text-align: center;
+      justify-content: center;
       font-weight: 600;
-      font-size: 14px;
+      display: flex;
     }
 
     /* CTA pill — Oncy exact: lime pill + dark circle */
@@ -185,7 +187,7 @@
     #hero {
       position: relative;
       overflow: hidden;
-      background: #efe9df;      /* ← Oncy warm cream */
+      background: #f0e8de;      /* ← Oncy exact cream base */
       border-radius: var(--card-r);
       min-height: calc(100svh - 14px);
       display: flex;
@@ -200,25 +202,50 @@
       border-radius: var(--card-r);
       pointer-events: none;
       overflow: hidden;
+      z-index: 0;
     }
-    /* Oncy-style colour blobs on cream base */
+    /* Exact Oncy blob positions from reference: blue TL, pink centre, orange R, amber BL */
     .hero-bokeh::before {
       content: '';
       position: absolute;
       inset: 0;
       background:
-        radial-gradient(ellipse 68% 52% at 14% 26%, rgba(170,215,255,0.70) 0%, transparent 62%),
-        radial-gradient(ellipse 58% 65% at 78% 38%, rgba(242,145,178,0.65) 0%, transparent 62%),
-        radial-gradient(ellipse 78% 52% at 58% 82%, rgba(255,198,125,0.55) 0%, transparent 62%),
-        radial-gradient(ellipse 42% 48% at 6%  68%, rgba(200,168,255,0.48) 0%, transparent 56%),
-        radial-gradient(ellipse 40% 40% at 55% 22%, rgba(145,230,180,0.40) 0%, transparent 55%);
+        radial-gradient(ellipse 34% 42% at 13% 22%, rgba(160,218,238,0.62) 0%, transparent 65%),
+        radial-gradient(ellipse 55% 62% at 52% 40%, rgba(218,168,210,0.68) 0%, transparent 62%),
+        radial-gradient(ellipse 60% 72% at 80% 38%, rgba(238,178,108,0.72) 0%, transparent 60%),
+        radial-gradient(ellipse 48% 40% at 18% 78%, rgba(205,160,90,0.58)  0%, transparent 58%);
     }
-    /* Cream-tinted veil so text stays readable */
+    /* Light cream veil — keeps text readable */
     .hero-bokeh::after {
       content: '';
       position: absolute;
       inset: 0;
-      background: rgba(239,233,223,0.28);
+      background: rgba(240,232,222,0.22);
+    }
+
+    /* ── Botanical leaf (white SVG, exact Oncy centre-right element) ── */
+    .hero-leaf {
+      position: absolute;
+      left: 44%;
+      top: 4%;
+      width: 148px;
+      height: 430px;
+      pointer-events: none;
+      opacity: 0.55;
+      z-index: 1;
+    }
+
+    /* ── Film grain overlay (Oncy premium texture) ── */
+    .hero-grain {
+      position: absolute;
+      inset: 0;
+      border-radius: var(--card-r);
+      pointer-events: none;
+      z-index: 2;
+      opacity: 0.048;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23g)'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 240px 240px;
     }
 
     /* Hero content */
@@ -258,64 +285,81 @@
       line-height: 1.8;
     }
 
-    /* ── Middle: title column + pills column ── */
+    /* ── Middle: CSS Grid — title left, pills top-right ── */
     .hero-mid {
-      display: flex;
-      align-items: center;
+      display: grid;
+      grid-template-columns: 1fr 260px;
+      grid-template-rows: 1fr;
+      gap: 32px;
       flex: 1;
-      gap: 28px;
       min-height: 0;
+      align-items: start;      /* pills align with FIRST title line */
+      padding-top: 20px;
     }
     .hero-title-col {
-      flex: 1;
       min-width: 0;
       overflow: hidden;
+      align-self: center;      /* title block vertically centered in its cell */
     }
 
-    /* ── THE TITLE — JS scales to fill hero-title-col width ── */
-    .hero-title {
+    /* ── HERO TITLE: 3 stacked lines, JS scales all to width of widest ── */
+    .hero-title-block {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      padding: 16px 0;
+    }
+    .hero-title-line {
       font-family: "Inter Display", 'Inter', system-ui, sans-serif;
       font-optical-sizing: auto;
       font-weight: 500;
       font-style: normal;
-      line-height: 0.85;
+      line-height: 0.88;
       letter-spacing: -0.04em;
-      word-spacing: 0.18em;   /* makes space clearly wider than a dot */
       text-transform: uppercase;
       color: var(--ink);
       white-space: nowrap;
       display: block;
-      padding: 20px 0;
-      font-size: 13vw;
+      font-size: 11vw; /* CSS fallback — JS overrides */
     }
 
-    /* ── Service pills: 2×2 grid, right of title ── */
+    /* ── Service pills: 2×2 grid, TOP-RIGHT ── */
     .hero-pills-col {
-      width: 264px;
-      flex-shrink: 0;
+      /* grid cell — auto width from parent grid */
+      align-self: start;
+      padding-top: 6px;        /* optical alignment with first title line */
     }
     .hero-pills-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 8px;
+      gap: 9px;
     }
+    /* ── h-tag: exact Oncy pill — border, radius, weight ── */
     .h-tag {
       display: inline-flex;
       align-items: center;
-      gap: 5px;
-      height: 32px;
-      padding: 0 13px;
-      border: 1px solid rgba(0,16,48,0.13);
+      gap: 6px;
+      height: 34px;
+      padding: 0 15px;
+      border: 1px solid rgba(0,16,48,0.12);
       border-radius: 100px;
-      font-size: 11px;
-      background: rgba(255,255,255,0.60);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
+      font-size: 11.5px;
+      font-weight: 450;
+      background: rgba(255,255,255,0.58);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
       color: var(--ink);
       white-space: nowrap;
-      justify-content: center;
+      justify-content: flex-start;
+      letter-spacing: 0;
     }
-    .h-tag::before { content: '·'; font-size: 13px; color: var(--grey); }
+    .h-tag::before {
+      content: '•';
+      font-size: 11px;
+      color: var(--ink);
+      opacity: 0.55;
+      flex-shrink: 0;
+    }
 
     /* ── Bottom row: consultation block + manifesto + oval ── */
     .hero-bottom {
@@ -355,52 +399,57 @@
     }
 
     .hero-consult-card {
-      background: #fff;
-      border-radius: 16px;
-      padding: 20px 22px 18px;
-      box-shadow: 0 6px 36px rgba(0,16,48,0.11);
-      width: 306px;
-      margin-left: -18px;   /* slight overlap over photo edge */
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 22px 24px 20px;
+      box-shadow: 0 8px 40px rgba(0,16,48,0.12);
+      width: 320px;
+      margin-left: -20px;    /* Oncy: slight overlap over photo */
     }
     .hero-consult-card h3 {
-      font-size: 26px;
+      font-size: 24px;
       font-weight: 600;
       color: var(--ink);
-      line-height: 1.18;
-      margin-bottom: 8px;
-      letter-spacing: -0.03em;
+      line-height: 1.2;
+      margin-bottom: 6px;
+      letter-spacing: -0.025em;
     }
     .hero-consult-sub {
-      font-size: 9.5px;
-      letter-spacing: 0.2em;
+      font-size: 9px;
+      letter-spacing: 0.22em;
       text-transform: uppercase;
       color: var(--grey);
-      margin-bottom: 16px;
+      margin-bottom: 18px;
+      font-weight: 500;
     }
+    /* Oncy CTA button: full-width dark pill + lime circle */
     .hero-consult-btn {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      height: 46px;
-      padding: 0 8px 0 20px;
+      width: 100%;
+      height: 52px;
+      padding: 0 9px 0 22px;
       background: var(--ink);
       color: #fff;
       border-radius: 100px;
       text-decoration: none;
-      font-size: 13px;
+      font-size: 13.5px;
       font-weight: 500;
-      transition: opacity 0.2s;
-      width: 100%;
+      letter-spacing: -0.01em;
+      transition: opacity 0.18s;
     }
-    .hero-consult-btn:hover { opacity: 0.85; }
+    .hero-consult-btn:hover { opacity: 0.82; }
     .hero-consult-btn-icon {
-      width: 30px; height: 30px;
+      width: 34px; height: 34px;
       background: var(--lime);
       border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
       color: var(--ink);
-      font-size: 13px;
+      font-size: 15px;
+      font-weight: 600;
       flex-shrink: 0;
+      line-height: 1;
     }
 
     /* Manifesto / bio text (bottom right area) */
@@ -817,7 +866,7 @@
     <li><a href="#hero" class="active">Home</a></li>
     <li><a href="#about">About</a></li>
     <li><a href="#work">Projects</a></li>
-    <li><a href="#contact">Contact</a></li>
+    <li><a href="#contact">Services</a></li>
   </ul>
 
   <a href="mailto:gratz.ksenia@gmail.com" class="nav-cta">
@@ -844,8 +893,34 @@
 <!-- ░░░░░░░░░░ HERO ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ -->
 <section id="hero">
 
-  <!-- Soft bokeh ambient layer (inside white card) -->
+  <!-- Bokeh blobs -->
   <div class="hero-bokeh" aria-hidden="true"></div>
+
+  <!-- Botanical leaf (exact Oncy background element) -->
+  <svg class="hero-leaf" viewBox="0 0 120 400" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <path d="M60 10 C63 110 57 255 60 390" stroke="white" stroke-width="1.3"/>
+    <path d="M60 48  C47 39  25 35  5  38"  stroke="white" stroke-width="0.95" opacity="0.8"/>
+    <path d="M60 48  C73 39  95 35  115 38"  stroke="white" stroke-width="0.95" opacity="0.8"/>
+    <path d="M60 82  C46 72  23 67  3  70"  stroke="white" stroke-width="0.95" opacity="0.75"/>
+    <path d="M60 82  C74 72  97 67  117 70" stroke="white" stroke-width="0.95" opacity="0.75"/>
+    <path d="M60 116 C46 105 23 99  3  103" stroke="white" stroke-width="0.9"  opacity="0.7"/>
+    <path d="M60 116 C74 105 97 99  117 103" stroke="white" stroke-width="0.9" opacity="0.7"/>
+    <path d="M60 150 C46 139 23 133 4  137" stroke="white" stroke-width="0.9"  opacity="0.65"/>
+    <path d="M60 150 C74 139 97 133 116 137" stroke="white" stroke-width="0.9" opacity="0.65"/>
+    <path d="M60 183 C47 173 25 167 7  171" stroke="white" stroke-width="0.85" opacity="0.6"/>
+    <path d="M60 183 C73 173 95 167 113 171" stroke="white" stroke-width="0.85" opacity="0.6"/>
+    <path d="M60 215 C48 206 28 201 12 204" stroke="white" stroke-width="0.85" opacity="0.55"/>
+    <path d="M60 215 C72 206 92 201 108 204" stroke="white" stroke-width="0.85" opacity="0.55"/>
+    <path d="M60 245 C49 237 32 233 18 236" stroke="white" stroke-width="0.8"  opacity="0.5"/>
+    <path d="M60 245 C71 237 88 233 102 236" stroke="white" stroke-width="0.8" opacity="0.5"/>
+    <path d="M60 272 C51 265 37 261 26 264" stroke="white" stroke-width="0.75" opacity="0.42"/>
+    <path d="M60 272 C69 265 83 261 94 264" stroke="white" stroke-width="0.75" opacity="0.42"/>
+    <path d="M60 296 C53 291 42 288 34 290" stroke="white" stroke-width="0.7"  opacity="0.35"/>
+    <path d="M60 296 C67 291 78 288 86 290" stroke="white" stroke-width="0.7"  opacity="0.35"/>
+  </svg>
+
+  <!-- Film grain (Oncy premium texture) -->
+  <div class="hero-grain" aria-hidden="true"></div>
 
   <div class="hero-inner">
 
@@ -865,15 +940,19 @@
     <div class="hero-mid">
 
       <div class="hero-title-col">
-        <h1 class="hero-title" id="heroTitle">KSENIA GRATZ</h1>
+        <h1 class="hero-title-block" id="heroTitleBlock" aria-label="Design that connects">
+          <span class="hero-title-line" data-line="0">DESIGN</span>
+          <span class="hero-title-line" data-line="1">THAT</span>
+          <span class="hero-title-line" data-line="2">CONNECTS</span>
+        </h1>
       </div>
 
       <div class="hero-pills-col">
         <div class="hero-pills-grid">
-          <span class="h-tag">Product Design</span>
-          <span class="h-tag">UX Research</span>
-          <span class="h-tag">UI Prototyping</span>
-          <span class="h-tag">Motion Graphics</span>
+          <span class="h-tag">Brand Strategy</span>
+          <span class="h-tag">Visual Identity</span>
+          <span class="h-tag">UI / UX Design</span>
+          <span class="h-tag">Motion &amp; Media</span>
         </div>
       </div>
 
@@ -892,7 +971,7 @@
 
         <!-- White card -->
         <div class="hero-consult-card">
-          <h3>Need a Product Solution?</h3>
+          <h3>Let's Build<br>Something Real</h3>
           <p class="hero-consult-sub">Consult with Ksenia Gratz</p>
           <a href="mailto:gratz.ksenia@gmail.com" class="hero-consult-btn">
             <span>Get In Touch</span>
@@ -902,13 +981,11 @@
 
       </div>
 
-      <!-- Manifesto / bio text -->
+      <!-- Bottom editorial text (Oncy manifesto position) -->
       <p class="hero-manifesto">
-        I am Ksenia — a <strong>Product &amp; UX/UI Designer</strong> obsessed
-        with crafting clear, user-centered layouts and interactive prototypes.
-        With over <strong>7 years of expertise</strong> in visual communication,
-        my work blends analytical research, creativity, and emotion to help
-        <strong>digital products leave a lasting mark.</strong>
+        Strategy, emotion and visual clarity —<br>
+        combined into digital experiences<br>
+        with character.
       </p>
 
       <!-- Scroll oval (Oncy far-right detail) -->
@@ -1098,24 +1175,30 @@ function tick() {
 tick(); setInterval(tick, 1000);
 
 
-/* ── Fit title to fill hero-title-col width exactly ─ */
+/* ── Fit title: scale all 3 lines so widest fills hero-title-col ── */
 function fitTitle() {
-  const el    = document.getElementById('heroTitle');
   const hero  = document.getElementById('hero');
   const pills = document.querySelector('.hero-pills-col');
-  if (!el || !hero) return;
+  const lines = document.querySelectorAll('.hero-title-line');
+  if (!hero || !lines.length) return;
 
-  const heroStyle = getComputedStyle(hero);
-  const padLR = parseFloat(heroStyle.paddingLeft) + parseFloat(heroStyle.paddingRight);
-  const pillsW = pills ? pills.offsetWidth + 28 : 0;   /* 28 = gap */
-  const maxW = hero.clientWidth - padLR - pillsW;
+  /* maxW = width of the title grid cell */
+  const titleCol = document.querySelector('.hero-title-col');
+  const maxW = titleCol ? titleCol.clientWidth : (() => {
+    const s = getComputedStyle(hero);
+    return hero.clientWidth - parseFloat(s.paddingLeft) - parseFloat(s.paddingRight) - 292;
+  })();
   if (!maxW || maxW < 10) { setTimeout(fitTitle, 80); return; }
 
-  el.style.fontSize = '200px';
+  /* Set reference size, measure each line, find widest */
+  lines.forEach(l => l.style.fontSize = '200px');
+
   requestAnimationFrame(() => requestAnimationFrame(() => {
-    const sw = el.scrollWidth;
-    if (!sw) { setTimeout(fitTitle, 80); return; }
-    el.style.fontSize = Math.floor(200 * maxW / sw * 0.994) + 'px';
+    let widest = 0;
+    lines.forEach(l => { if (l.scrollWidth > widest) widest = l.scrollWidth; });
+    if (!widest) { setTimeout(fitTitle, 80); return; }
+    const newSize = Math.floor(200 * maxW / widest * 0.994) + 'px';
+    lines.forEach(l => l.style.fontSize = newSize);
   }));
 }
 document.addEventListener('DOMContentLoaded', () => setTimeout(fitTitle, 80));
