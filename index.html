@@ -93,39 +93,46 @@
       white-space: nowrap;
       transition: background 0.18s, color 0.18s;
     }
-    /* Active = dark fill (exactly Oncy) */
+    /* Active = dark fill, wide pill (exactly Oncy) */
     .nav-links li a.active,
     .nav-links li a:hover {
       background: var(--outer);
       color: var(--white);
       border-color: var(--outer);
     }
+    .nav-links li a.active {
+      padding-left: 42px;
+      padding-right: 42px;
+      font-weight: 600;
+      font-size: 14px;
+    }
 
-    /* CTA pill */
+    /* CTA pill — Oncy exact: lime pill + dark circle */
     .nav-cta {
       display: inline-flex;
       align-items: center;
-      gap: 10px;
-      height: 40px;
-      padding: 0 8px 0 20px;
+      gap: 12px;
+      height: 48px;
+      padding: 0 8px 0 24px;
       background: var(--lime);
       border-radius: 90px;
-      font-size: 13px;
-      font-weight: 500;
+      font-size: 14px;
+      font-weight: 600;
       color: var(--ink);
       text-decoration: none;
       flex-shrink: 0;
       white-space: nowrap;
+      letter-spacing: -0.01em;
       transition: transform 0.2s;
     }
     .nav-cta:hover { transform: scale(1.03); }
     .nav-cta-icon {
-      width: 28px; height: 28px;
+      width: 36px; height: 36px;
       background: var(--ink);
       border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
       color: var(--lime);
-      font-size: 13px; line-height: 1;
+      font-size: 16px; line-height: 1;
     }
 
     /* Mobile hamburger */
@@ -238,8 +245,9 @@
       gap: 6px;
     }
     .hero-clock-icon {
-      font-size: 14px;
+      font-size: 16px;
       line-height: 1;
+      filter: saturate(1.2);
     }
     .hero-coord {
       text-align: right;
@@ -272,6 +280,7 @@
       font-style: normal;
       line-height: 0.85;
       letter-spacing: -0.04em;
+      word-spacing: 0.18em;   /* makes space clearly wider than a dot */
       text-transform: uppercase;
       color: var(--ink);
       white-space: nowrap;
@@ -324,9 +333,9 @@
       flex-shrink: 0;
     }
     .hero-photo-thumb {
-      width: 162px;
-      height: 192px;
-      border-radius: 16px;
+      width: 185px;
+      height: 220px;
+      border-radius: 18px;
       background: #ddd5c5;
       flex-shrink: 0;
       overflow: hidden;
@@ -354,12 +363,12 @@
       margin-left: -18px;   /* slight overlap over photo edge */
     }
     .hero-consult-card h3 {
-      font-size: 19px;
+      font-size: 26px;
       font-weight: 600;
       color: var(--ink);
-      line-height: 1.22;
-      margin-bottom: 5px;
-      letter-spacing: -0.025em;
+      line-height: 1.18;
+      margin-bottom: 8px;
+      letter-spacing: -0.03em;
     }
     .hero-consult-sub {
       font-size: 9.5px;
@@ -410,17 +419,17 @@
       color: rgba(0,16,48,0.65);
     }
 
-    /* Oval scroll button (Oncy detail) */
+    /* Oval scroll button — Oncy: tall thin pill, chevron inside */
     .scroll-oval {
-      width: 44px; height: 68px;
-      border: 1.5px solid rgba(0,16,48,0.18);
+      width: 40px; height: 76px;
+      border: 1.5px solid rgba(0,16,48,0.20);
       border-radius: 100px;
       display: flex; align-items: center; justify-content: center;
-      text-decoration: none; color: var(--ink);
-      transition: border-color 0.2s, transform 0.2s;
+      text-decoration: none; color: rgba(0,16,48,0.45);
+      transition: border-color 0.2s, transform 0.2s, color 0.2s;
       flex-shrink: 0;
     }
-    .scroll-oval:hover { border-color: var(--ink); transform: translateY(3px); }
+    .scroll-oval:hover { border-color: var(--ink); color: var(--ink); transform: translateY(4px); }
 
 
     /* ══════════════════════════════════════════════════════════
@@ -843,7 +852,7 @@
     <!-- ── Top meta: clock left · coordinates right ── -->
     <div class="hero-meta">
       <span class="hero-clock">
-        <span class="hero-clock-icon">✦</span>
+        <span class="hero-clock-icon">☀️</span>
         <span id="clock">—</span>
       </span>
       <div class="hero-coord">
@@ -856,7 +865,7 @@
     <div class="hero-mid">
 
       <div class="hero-title-col">
-        <h1 class="hero-title" id="heroTitle">KSENIA.GRATZ</h1>
+        <h1 class="hero-title" id="heroTitle">KSENIA GRATZ</h1>
       </div>
 
       <div class="hero-pills-col">
@@ -878,7 +887,7 @@
 
         <!-- Portrait photo -->
         <div class="hero-photo-thumb" id="heroPhoto">
-          <img src="images/ksenia-portret.png" alt="Ksenia Gratz">
+          <img src="images/ksenia-portret-2.png" alt="Ksenia Gratz">
         </div>
 
         <!-- White card -->
@@ -904,9 +913,8 @@
 
       <!-- Scroll oval (Oncy far-right detail) -->
       <a href="#work" class="scroll-oval" aria-label="Scroll to projects">
-        <svg width="14" height="20" viewBox="0 0 14 20" fill="none" aria-hidden="true">
-          <line x1="7" y1="1" x2="7" y2="19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-          <polyline points="2,13 7,19 12,13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <svg width="12" height="8" viewBox="0 0 12 8" fill="none" aria-hidden="true">
+          <polyline points="1,1 6,7 11,1" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </a>
 
@@ -1092,11 +1100,17 @@ tick(); setInterval(tick, 1000);
 
 /* ── Fit title to fill hero-title-col width exactly ─ */
 function fitTitle() {
-  const el  = document.getElementById('heroTitle');
-  const col = el ? el.parentElement : null;   /* .hero-title-col */
-  if (!el || !col) return;
-  const maxW = col.clientWidth;
-  if (!maxW) { setTimeout(fitTitle, 80); return; }
+  const el    = document.getElementById('heroTitle');
+  const hero  = document.getElementById('hero');
+  const pills = document.querySelector('.hero-pills-col');
+  if (!el || !hero) return;
+
+  const heroStyle = getComputedStyle(hero);
+  const padLR = parseFloat(heroStyle.paddingLeft) + parseFloat(heroStyle.paddingRight);
+  const pillsW = pills ? pills.offsetWidth + 28 : 0;   /* 28 = gap */
+  const maxW = hero.clientWidth - padLR - pillsW;
+  if (!maxW || maxW < 10) { setTimeout(fitTitle, 80); return; }
+
   el.style.fontSize = '200px';
   requestAnimationFrame(() => requestAnimationFrame(() => {
     const sw = el.scrollWidth;
