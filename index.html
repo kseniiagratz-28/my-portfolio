@@ -20,14 +20,14 @@
   <style>
     /* ── Tokens ─────────────────────────────────────────────── */
     :root {
-      --lime:   #f6ff2a;   /* Oncy exact */
-      --outer:  #0e0d0a;   /* Oncy outer page bg */
+      --lime:   #BADB27;
+      --outer:  #001030;
       --white:  #ffffff;
-      --ink:    #0e0d0a;
+      --ink:    #001030;
       --grey:   #777777;
-      --muted:  rgba(0,0,0,0.35);
-      --border: rgba(0,0,0,0.09);
-      --card-r: 28px;      /* white card border-radius */
+      --muted:  rgba(0,16,48,0.35);
+      --border: rgba(0,16,48,0.09);
+      --card-r: 28px;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -62,17 +62,15 @@
       border-bottom: 1px solid rgba(0,0,0,0.07);
     }
 
-    /* Logo */
+    /* Logo — star icon */
     .nav-logo {
-      font-family: 'Inter', sans-serif;
-      font-weight: 600;
-      font-size: 14.5px;
-      letter-spacing: -0.025em;
-      color: var(--ink);
+      display: flex;
+      align-items: center;
       text-decoration: none;
       flex-shrink: 0;
-      white-space: nowrap;
+      transition: opacity 0.18s;
     }
+    .nav-logo:hover { opacity: 0.75; }
 
     /* ── Individual pill items (KEY Oncy structure) ── */
     .nav-links {
@@ -180,9 +178,9 @@
     #hero {
       position: relative;
       overflow: hidden;
-      background: var(--white);
+      background: #efe9df;      /* ← Oncy warm cream */
       border-radius: var(--card-r);
-      min-height: calc(100svh - 14px);   /* accounts for bottom padding only */
+      min-height: calc(100svh - 14px);
       display: flex;
       flex-direction: column;
       padding: 96px 44px 48px;
@@ -196,23 +194,24 @@
       pointer-events: none;
       overflow: hidden;
     }
-    /* Soft blurred color blobs — exact Oncy bokeh feel */
+    /* Oncy-style colour blobs on cream base */
     .hero-bokeh::before {
       content: '';
       position: absolute;
       inset: 0;
       background:
-        radial-gradient(ellipse 72% 55% at 18% 30%, rgba(168,210,255,0.55) 0%, transparent 65%),
-        radial-gradient(ellipse 60% 65% at 82% 18%, rgba(150,235,185,0.45) 0%, transparent 60%),
-        radial-gradient(ellipse 80% 55% at 55% 85%, rgba(255,210,155,0.40) 0%, transparent 60%),
-        radial-gradient(ellipse 45% 45% at 8%  70%, rgba(210,170,255,0.35) 0%, transparent 55%);
+        radial-gradient(ellipse 68% 52% at 14% 26%, rgba(170,215,255,0.70) 0%, transparent 62%),
+        radial-gradient(ellipse 58% 65% at 78% 38%, rgba(242,145,178,0.65) 0%, transparent 62%),
+        radial-gradient(ellipse 78% 52% at 58% 82%, rgba(255,198,125,0.55) 0%, transparent 62%),
+        radial-gradient(ellipse 42% 48% at 6%  68%, rgba(200,168,255,0.48) 0%, transparent 56%),
+        radial-gradient(ellipse 40% 40% at 55% 22%, rgba(145,230,180,0.40) 0%, transparent 55%);
     }
-    /* White veil so text stays readable */
+    /* Cream-tinted veil so text stays readable */
     .hero-bokeh::after {
       content: '';
       position: absolute;
       inset: 0;
-      background: rgba(255,255,255,0.45);
+      background: rgba(239,233,223,0.28);
     }
 
     /* Hero content */
@@ -222,11 +221,11 @@
       flex: 1; gap: 0;
     }
 
-    /* Top meta row */
+    /* ── Top meta row ── */
     .hero-meta {
       display: flex;
       justify-content: space-between;
-      align-items: center;
+      align-items: flex-start;
       padding-bottom: 12px;
     }
     .hero-clock {
@@ -234,15 +233,38 @@
       color: var(--grey);
       font-variant-numeric: tabular-nums;
       letter-spacing: 0.06em;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .hero-clock-icon {
+      font-size: 14px;
+      line-height: 1;
     }
     .hero-coord {
+      text-align: right;
       font-size: 10.5px;
-      letter-spacing: 0.18em;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--grey);
+      line-height: 1.8;
     }
 
-    /* ── THE TITLE — JS scales this to fill full card width ── */
+    /* ── Middle: title column + pills column ── */
+    .hero-mid {
+      display: flex;
+      align-items: center;
+      flex: 1;
+      gap: 28px;
+      min-height: 0;
+    }
+    .hero-title-col {
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    /* ── THE TITLE — JS scales to fill hero-title-col width ── */
     .hero-title {
       font-family: "Inter Display", 'Inter', system-ui, sans-serif;
       font-optical-sizing: auto;
@@ -254,60 +276,144 @@
       color: var(--ink);
       white-space: nowrap;
       display: block;
-      margin: auto 0;
       padding: 20px 0;
-      font-size: 13vw; /* CSS fallback while JS loads */
+      font-size: 13vw;
     }
 
-    /* Bottom info row */
-    .hero-bottom {
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      gap: 24px;
-      margin-top: auto;
+    /* ── Service pills: 2×2 grid, right of title ── */
+    .hero-pills-col {
+      width: 264px;
+      flex-shrink: 0;
     }
-    .hero-tagline {
-      font-size: 10.5px;
-      font-weight: 500;
-      letter-spacing: 0.17em;
-      text-transform: uppercase;
-      color: var(--grey);
-      line-height: 2;
-      max-width: 260px;
-    }
-    .hero-right {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 14px;
-    }
-    .hero-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 7px;
-      justify-content: flex-end;
+    .hero-pills-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
     }
     .h-tag {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      height: 29px;
-      padding: 0 14px;
-      border: 1px solid rgba(0,0,0,0.12);
+      gap: 5px;
+      height: 32px;
+      padding: 0 13px;
+      border: 1px solid rgba(0,16,48,0.13);
       border-radius: 100px;
-      font-size: 11.5px;
-      background: rgba(255,255,255,0.6);
-      backdrop-filter: blur(6px);
+      font-size: 11px;
+      background: rgba(255,255,255,0.60);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
       color: var(--ink);
       white-space: nowrap;
+      justify-content: center;
     }
-    .h-tag::before { content: '·'; font-size: 12px; color: var(--grey); }
+    .h-tag::before { content: '·'; font-size: 13px; color: var(--grey); }
+
+    /* ── Bottom row: consultation block + manifesto + oval ── */
+    .hero-bottom {
+      display: flex;
+      align-items: flex-end;
+      gap: 28px;
+      margin-top: auto;
+      padding-top: 28px;
+    }
+
+    /* Photo + white card block */
+    .hero-consult {
+      display: flex;
+      align-items: flex-end;
+      flex-shrink: 0;
+    }
+    .hero-photo-thumb {
+      width: 162px;
+      height: 192px;
+      border-radius: 16px;
+      background: #ddd5c5;
+      flex-shrink: 0;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 8px;
+      color: rgba(0,16,48,0.22);
+    }
+    .hero-photo-thumb svg { opacity: 0.35; }
+    .hero-photo-thumb img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .hero-consult-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 20px 22px 18px;
+      box-shadow: 0 6px 36px rgba(0,16,48,0.11);
+      width: 306px;
+      margin-left: -18px;   /* slight overlap over photo edge */
+    }
+    .hero-consult-card h3 {
+      font-size: 19px;
+      font-weight: 600;
+      color: var(--ink);
+      line-height: 1.22;
+      margin-bottom: 5px;
+      letter-spacing: -0.025em;
+    }
+    .hero-consult-sub {
+      font-size: 9.5px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--grey);
+      margin-bottom: 16px;
+    }
+    .hero-consult-btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 46px;
+      padding: 0 8px 0 20px;
+      background: var(--ink);
+      color: #fff;
+      border-radius: 100px;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      transition: opacity 0.2s;
+      width: 100%;
+    }
+    .hero-consult-btn:hover { opacity: 0.85; }
+    .hero-consult-btn-icon {
+      width: 30px; height: 30px;
+      background: var(--lime);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--ink);
+      font-size: 13px;
+      flex-shrink: 0;
+    }
+
+    /* Manifesto / bio text (bottom right area) */
+    .hero-manifesto {
+      flex: 1;
+      font-size: 9.2px;
+      font-weight: 500;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      color: rgba(0,16,48,0.45);
+      line-height: 2.1;
+      max-width: 310px;
+    }
+    .hero-manifesto strong {
+      font-weight: 700;
+      color: rgba(0,16,48,0.65);
+    }
 
     /* Oval scroll button (Oncy detail) */
     .scroll-oval {
       width: 44px; height: 68px;
-      border: 1.5px solid rgba(0,0,0,0.18);
+      border: 1.5px solid rgba(0,16,48,0.18);
       border-radius: 100px;
       display: flex; align-items: center; justify-content: center;
       text-decoration: none; color: var(--ink);
@@ -374,8 +480,8 @@
       bottom: 0; left: 0; right: 0;
       padding: 28px 28px 24px;
       background: linear-gradient(to top,
-        rgba(12,12,10,0.72) 0%,
-        rgba(12,12,10,0.30) 55%,
+        rgba(0,16,48,0.72) 0%,
+        rgba(0,16,48,0.30) 55%,
         transparent 100%
       );
       display: flex;
@@ -439,7 +545,7 @@
     }
     .proj-cta:hover {
       transform: translateY(-2px);
-      box-shadow: 0 14px 48px rgba(246,255,42,0.32);
+      box-shadow: 0 14px 48px rgba(186,219,39,0.32);
     }
     .proj-cta-arrow {
       width: 38px; height: 38px;
@@ -483,11 +589,35 @@
 
     .about-grid {
       display: grid;
-      grid-template-columns: 1fr 1.15fr;
-      gap: 80px;
+      grid-template-columns: 320px 1fr;
+      gap: 64px;
       margin-top: 44px;
       align-items: start;
     }
+
+    /* ── Photo frame placeholder ── */
+    .about-photo-frame {
+      width: 100%;
+      aspect-ratio: 3 / 4;
+      border-radius: 20px;
+      border: 1.5px dashed rgba(0,0,0,0.13);
+      background: #f5f5f3;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+    .about-photo-frame svg { opacity: 0.22; }
+    .about-photo-frame span {
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(0,0,0,0.28);
+    }
+
     .about-bio {
       font-size: 1rem;
       line-height: 1.85;
@@ -573,7 +703,7 @@
     }
     .contact-btn:hover {
       transform: scale(1.03);
-      box-shadow: 0 10px 36px rgba(246,255,42,0.3);
+      box-shadow: 0 10px 36px rgba(186,219,39,0.30);
     }
     .contact-btn-icon {
       width: 36px; height: 36px;
@@ -630,15 +760,22 @@
       #work, #about, #contact { padding: 40px 22px; border-radius: 20px; margin-top: 8px; }
 
       .hero-meta { display: none; }
+      .hero-mid { flex-direction: column; align-items: flex-start; gap: 16px; }
+      .hero-pills-col { width: 100%; }
+      .hero-pills-grid { grid-template-columns: 1fr 1fr; }
       .hero-title { padding: 16px 0; }
       .hero-bottom { flex-direction: column; align-items: flex-start; gap: 18px; }
-      .hero-right { align-items: flex-start; }
-      .hero-tags { justify-content: flex-start; }
+      .hero-consult { flex-direction: column; align-items: flex-start; gap: 12px; }
+      .hero-consult-card { margin-left: 0; width: 100%; max-width: 340px; }
+      .hero-photo-thumb { width: 100%; max-width: 200px; height: 160px; }
+      .hero-manifesto { display: none; }
+      .scroll-oval { display: none; }
 
       .proj-overlay { flex-direction: column; align-items: flex-start; }
       .proj-pills { justify-content: flex-start; }
 
-      .about-grid { grid-template-columns: 1fr; gap: 44px; }
+      .about-grid { grid-template-columns: 1fr; gap: 36px; }
+      .about-photo-frame { aspect-ratio: 4 / 3; max-width: 360px; }
       .contact-foot { flex-direction: column; gap: 14px; text-align: center; }
       .foot-links { flex-direction: column; gap: 10px; align-items: center; }
     }
@@ -654,7 +791,12 @@
 <!-- ░░░░░░░░░░ NAV ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ -->
 <nav id="nav">
 
-  <a href="#" class="nav-logo">Ksenia Gratz</a>
+  <a href="#" class="nav-logo" aria-label="Ksenia Gratz — Home">
+    <svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="34" height="34" rx="9" fill="#001030"/>
+      <path d="M17 6 L18.6 15.4 L28 17 L18.6 18.6 L17 28 L15.4 18.6 L6 17 L15.4 15.4 Z" fill="#BADB27"/>
+    </svg>
+  </a>
 
   <!-- Mobile burger -->
   <button class="nav-burger" id="burger" aria-label="Open menu" aria-expanded="false">
@@ -663,8 +805,9 @@
 
   <!-- Individual pill items — exact Oncy nav structure -->
   <ul class="nav-links" role="list">
-    <li><a href="#work" class="active">Work</a></li>
+    <li><a href="#hero" class="active">Home</a></li>
     <li><a href="#about">About</a></li>
+    <li><a href="#work">Projects</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
 
@@ -684,7 +827,7 @@
 
 
 <!-- ════════════════════════════════════════════════════════
-     ALL SECTIONS = WHITE CARDS on dark outer bg (#0e0d0a)
+     ALL SECTIONS = WHITE CARDS on dark outer bg (#001030)
      ════════════════════════════════════════════════════════ -->
 <div class="page-cards">
 
@@ -697,39 +840,79 @@
 
   <div class="hero-inner">
 
-    <!-- Top meta: clock + location -->
+    <!-- ── Top meta: clock left · coordinates right ── -->
     <div class="hero-meta">
-      <span class="hero-clock" id="clock">—</span>
-      <span class="hero-coord">47.75°N · SINGEN, DE</span>
+      <span class="hero-clock">
+        <span class="hero-clock-icon">✦</span>
+        <span id="clock">—</span>
+      </span>
+      <div class="hero-coord">
+        <div>47.7782° N, 8.8384° E</div>
+        <div>Singen / Germany</div>
+      </div>
     </div>
 
-    <!-- ── THE NAME — JS scales to fill exact card width ── -->
-    <h1 class="hero-title" id="heroTitle">KSENIA GRATZ</h1>
+    <!-- ── Middle: title fills left · pills 2×2 on right ── -->
+    <div class="hero-mid">
 
-    <!-- Bottom row: tagline left · tags + scroll oval right -->
+      <div class="hero-title-col">
+        <h1 class="hero-title" id="heroTitle">KSENIA.GRATZ</h1>
+      </div>
+
+      <div class="hero-pills-col">
+        <div class="hero-pills-grid">
+          <span class="h-tag">Product Design</span>
+          <span class="h-tag">UX Research</span>
+          <span class="h-tag">UI Prototyping</span>
+          <span class="h-tag">Motion Graphics</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── Bottom: photo+card · manifesto text · scroll oval ── -->
     <div class="hero-bottom">
 
-      <div class="hero-left">
-        <p class="hero-tagline">
-          PRODUCT DESIGNER · UX/UI<br>
-          MOTION &amp; 3D · BRAND IDENTITY
-        </p>
+      <!-- Consultation block (Oncy key element) -->
+      <div class="hero-consult">
+
+        <!-- Portrait frame — replace with <img> when photo is ready -->
+        <div class="hero-photo-thumb" id="heroPhoto">
+          <svg width="36" height="36" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+            <rect x="4" y="10" width="32" height="24" rx="4" stroke="#001030" stroke-width="1.5"/>
+            <circle cx="20" cy="22" r="6" stroke="#001030" stroke-width="1.5"/>
+            <path d="M14 10 L16 6 H24 L26 10" stroke="#001030" stroke-width="1.5" stroke-linejoin="round"/>
+          </svg>
+        </div>
+
+        <!-- White card -->
+        <div class="hero-consult-card">
+          <h3>Need a Product Solution?</h3>
+          <p class="hero-consult-sub">Consult with Ksenia Gratz</p>
+          <a href="mailto:gratz.ksenia@gmail.com" class="hero-consult-btn">
+            <span>Get In Touch</span>
+            <span class="hero-consult-btn-icon">→</span>
+          </a>
+        </div>
+
       </div>
 
-      <div class="hero-right">
-        <div class="hero-tags">
-          <span class="h-tag">UX / UI Design</span>
-          <span class="h-tag">Product Design</span>
-          <span class="h-tag">Motion &amp; 3D</span>
-          <span class="h-tag">Brand Identity</span>
-        </div>
-        <a href="#work" class="scroll-oval" aria-label="Scroll to work">
-          <svg width="14" height="20" viewBox="0 0 14 20" fill="none" aria-hidden="true">
-            <line x1="7" y1="1" x2="7" y2="19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-            <polyline points="2,13 7,19 12,13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </a>
-      </div>
+      <!-- Manifesto / bio text -->
+      <p class="hero-manifesto">
+        I am Ksenia — a <strong>Product &amp; UX/UI Designer</strong> obsessed
+        with crafting clear, user-centered layouts and interactive prototypes.
+        With over <strong>7 years of expertise</strong> in visual communication,
+        my work blends analytical research, creativity, and emotion to help
+        <strong>digital products leave a lasting mark.</strong>
+      </p>
+
+      <!-- Scroll oval (Oncy far-right detail) -->
+      <a href="#work" class="scroll-oval" aria-label="Scroll to projects">
+        <svg width="14" height="20" viewBox="0 0 14 20" fill="none" aria-hidden="true">
+          <line x1="7" y1="1" x2="7" y2="19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          <polyline points="2,13 7,19 12,13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
 
     </div>
 
@@ -798,51 +981,67 @@
 
   <div class="about-grid">
 
-    <div class="about-bio reveal">
-      <p>
-        Multimedia Designer with over&nbsp;7&nbsp;years of solid experience in
-        visual design for print, digital, and motion graphics. Recently upskilled
-        into Product Design, focusing on responsive web design, user-centered
-        layouts, and creating interactive prototypes.
-      </p>
-      <p>
-        Driven by crafting clear, well-thought-out digital solutions with a
-        strong visual and user experience impact. Currently completing the
-        <em>Digital&nbsp;Leute</em> Product Design Bootcamp in Germany.
-      </p>
+    <!-- LEFT: portrait photo frame -->
+    <div class="about-photo-frame reveal">
+      <!-- Replace this div's contents with <img src="images/ksenia.jpg" ...> when ready -->
+      <svg width="40" height="40" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+        <rect x="4" y="10" width="32" height="24" rx="4" stroke="#001030" stroke-width="1.5"/>
+        <circle cx="20" cy="22" r="6" stroke="#001030" stroke-width="1.5"/>
+        <path d="M14 10 L16 6 H24 L26 10" stroke="#001030" stroke-width="1.5" stroke-linejoin="round"/>
+      </svg>
+      <span>Your photo</span>
     </div>
 
-    <div class="reveal d1">
+    <!-- RIGHT: bio + skills + education -->
+    <div>
 
-      <p class="skills-head">Skills &amp; Tools</p>
-      <div class="skills-row">
-        <span class="sk">Figma</span>
-        <span class="sk">Adobe XD</span>
-        <span class="sk">After Effects</span>
-        <span class="sk">Cinema 4D</span>
-        <span class="sk">UX Research</span>
-        <span class="sk">Wireframing</span>
-        <span class="sk">Prototyping</span>
-        <span class="sk">Motion Design</span>
-        <span class="sk">Brand Identity</span>
-        <span class="sk">AI-assisted Design</span>
+      <div class="about-bio reveal">
+        <p>
+          Multimedia Designer with over&nbsp;7&nbsp;years of solid experience in
+          visual design for print, digital, and motion graphics. Recently upskilled
+          into Product Design, focusing on responsive web design, user-centered
+          layouts, and creating interactive prototypes.
+        </p>
+        <p>
+          Driven by crafting clear, well-thought-out digital solutions with a
+          strong visual and user experience impact. Currently completing the
+          <em>Digital&nbsp;Leute</em> Product Design Bootcamp in Germany.
+        </p>
       </div>
 
-      <div class="edu">
-        <div class="edu-row">
-          <span class="edu-yr">02 / 2026 – 05 / 2026</span>
-          <div>
-            <p class="edu-role">Product Design Bootcamp</p>
-            <p class="edu-place">Digital Leute, Germany</p>
+      <div class="reveal d1" style="margin-top:40px">
+
+        <p class="skills-head">Skills &amp; Tools</p>
+        <div class="skills-row">
+          <span class="sk">Figma</span>
+          <span class="sk">Adobe XD</span>
+          <span class="sk">After Effects</span>
+          <span class="sk">Cinema 4D</span>
+          <span class="sk">UX Research</span>
+          <span class="sk">Wireframing</span>
+          <span class="sk">Prototyping</span>
+          <span class="sk">Motion Design</span>
+          <span class="sk">Brand Identity</span>
+          <span class="sk">AI-assisted Design</span>
+        </div>
+
+        <div class="edu">
+          <div class="edu-row">
+            <span class="edu-yr">02 / 2026 – 05 / 2026</span>
+            <div>
+              <p class="edu-role">Product Design Bootcamp</p>
+              <p class="edu-place">Digital Leute, Germany</p>
+            </div>
+          </div>
+          <div class="edu-row">
+            <span class="edu-yr">7+ years</span>
+            <div>
+              <p class="edu-role">Multimedia Design</p>
+              <p class="edu-place">Print · Digital · Motion · 3D</p>
+            </div>
           </div>
         </div>
-        <div class="edu-row">
-          <span class="edu-yr">7+ years</span>
-          <div>
-            <p class="edu-role">Multimedia Design</p>
-            <p class="edu-place">Print · Digital · Motion · 3D</p>
-          </div>
-        </div>
+
       </div>
 
     </div>
@@ -895,17 +1094,14 @@ function tick() {
 tick(); setInterval(tick, 1000);
 
 
-/* ── Fit title to fill card width exactly ────────── */
+/* ── Fit title to fill hero-title-col width exactly ─ */
 function fitTitle() {
-  const hero = document.getElementById('hero');
-  const el   = document.getElementById('heroTitle');
-  if (!hero || !el) return;
-  const style  = getComputedStyle(hero);
-  const padLR  = parseFloat(style.paddingLeft) + parseFloat(style.paddingRight);
-  const maxW   = hero.clientWidth - padLR;
-  // Set large ref size, then scale proportionally
+  const el  = document.getElementById('heroTitle');
+  const col = el ? el.parentElement : null;   /* .hero-title-col */
+  if (!el || !col) return;
+  const maxW = col.clientWidth;
+  if (!maxW) { setTimeout(fitTitle, 80); return; }
   el.style.fontSize = '200px';
-  // Double rAF: first flush styles, second reads layout
   requestAnimationFrame(() => requestAnimationFrame(() => {
     const sw = el.scrollWidth;
     if (!sw) { setTimeout(fitTitle, 80); return; }
