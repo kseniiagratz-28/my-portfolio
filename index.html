@@ -44,22 +44,28 @@
 
 
     /* ══════════════════════════════════════════════════════════
-       NAV — floating fixed bar, individual pill items (Oncy-exact)
+       NAV — floating pill container, centred (Oncy-exact)
+       height:72px · border-radius:90px · border:#ededed
     ══════════════════════════════════════════════════════════ */
     #nav {
       position: fixed;
-      top: 0; left: 0; right: 0;
+      top: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(100% - 28px);
+      max-width: 1200px;
       z-index: 300;
-      padding: 14px 24px;
+      height: 72px;
+      padding: 8px 8px 8px 20px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      /* Light blur bg — works over both white cards and dark outer */
-      background: rgba(255,255,255,0.82);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      border-bottom: 1px solid rgba(0,0,0,0.07);
+      background: rgba(255,255,255,0.97);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      border-radius: 90px;
+      border: 1px solid #ededed;
     }
 
     /* Logo — star icon */
@@ -79,10 +85,13 @@
       gap: 6px;
       align-items: center;
     }
-    /* EACH item is its own bordered pill */
+    /* EACH item is its own bordered pill — Oncy: height 38px, padding 8px 12px */
     .nav-links li a {
-      display: block;
-      padding: 8px 20px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 38px;
+      padding: 0 16px;
       font-size: 13px;
       font-weight: 450;
       color: var(--ink);
@@ -97,16 +106,12 @@
     .nav-links li a:hover {
       background: rgba(0,16,48,0.06);
     }
-    /* Active = dark pill, Oncy-wide (min-width forces same width as Oncy reference) */
+    /* Active = near-black pill (Oncy: #0e0d0a) */
     .nav-links li a.active {
-      background: var(--outer);
+      background: #0e0d0a;
       color: var(--white);
-      border-color: var(--outer);
-      min-width: 160px;
-      text-align: center;
-      justify-content: center;
-      font-weight: 600;
-      display: flex;
+      border-color: #0e0d0a;
+      font-weight: 500;
     }
 
     /* CTA pill — Oncy exact: lime pill + dark circle */
@@ -114,8 +119,8 @@
       display: inline-flex;
       align-items: center;
       gap: 12px;
-      height: 48px;
-      padding: 0 8px 0 24px;
+      height: 54px;
+      padding: 8px 8px 8px 24px;
       background: var(--lime);
       border-radius: 90px;
       font-size: 14px;
@@ -187,12 +192,12 @@
     #hero {
       position: relative;
       overflow: hidden;
-      background: #f0e8de;      /* ← Oncy exact cream base */
-      border-radius: var(--card-r);
+      background: #f0e8de;      /* cream bokeh base */
+      border-radius: 32px;      /* Oncy-exact: 32px */
       min-height: calc(100svh - 14px);
       display: flex;
       flex-direction: column;
-      padding: 96px 44px 48px;
+      padding: 104px 48px 52px;  /* top clears floating nav (86px) + breathing room */
     }
 
     /* ── Bokeh / ambient light layer ─────────────────────── */
@@ -334,30 +339,28 @@
       grid-template-columns: 1fr 1fr;
       gap: 9px;
     }
-    /* ── h-tag: exact Oncy pill — border, radius, weight ── */
+    /* ── h-tag: Oncy-exact — transparent pill, 38px, separate dot ── */
     .h-tag {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      height: 34px;
-      padding: 0 15px;
-      border: 1px solid rgba(0,16,48,0.12);
-      border-radius: 100px;
-      font-size: 11.5px;
+      gap: 8px;
+      height: 38px;
+      padding: 0 14px;
+      border: 1px solid rgba(14,13,10,0.10);
+      border-radius: 90px;
+      font-size: 12px;
       font-weight: 450;
-      background: rgba(255,255,255,0.58);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      color: var(--ink);
+      background: transparent;
+      color: #525252;
       white-space: nowrap;
-      justify-content: flex-start;
       letter-spacing: 0;
     }
-    .h-tag::before {
-      content: '•';
-      font-size: 11px;
-      color: var(--ink);
-      opacity: 0.55;
+    /* Dot: separate 6px filled circle (Oncy framer-2eXEF dot child) */
+    .h-tag-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #525252;
       flex-shrink: 0;
     }
 
@@ -379,7 +382,7 @@
     .hero-photo-thumb {
       width: 185px;
       height: 220px;
-      border-radius: 18px;
+      border-radius: 24px;      /* Oncy-exact: 24px */
       background: #ddd5c5;
       flex-shrink: 0;
       overflow: hidden;
@@ -399,12 +402,12 @@
     }
 
     .hero-consult-card {
-      background: #ffffff;
-      border-radius: 18px;
+      background: #fffff7;      /* Oncy token: --token-0d754fa8 (yellowish white) */
+      border-radius: 28px;      /* Oncy-exact: 28px outer radius */
       padding: 22px 24px 20px;
-      box-shadow: 0 8px 40px rgba(0,16,48,0.12);
+      box-shadow: 0 8px 40px rgba(0,16,48,0.10);
       width: 320px;
-      margin-left: -20px;    /* Oncy: slight overlap over photo */
+      margin-left: -20px;       /* Oncy: slight overlap over photo */
     }
     .hero-consult-card h3 {
       font-size: 24px;
@@ -442,7 +445,7 @@
     .hero-consult-btn:hover { opacity: 0.82; }
     .hero-consult-btn-icon {
       width: 34px; height: 34px;
-      background: var(--lime);
+      background: #bbde5e;      /* Oncy-exact: rgb(187,222,94) */
       border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
       color: var(--ink);
@@ -452,29 +455,33 @@
       line-height: 1;
     }
 
-    /* Manifesto / bio text (bottom right area) */
+    /* Manifesto / bio text — Oncy: #525252, no uppercase, 13-14px */
     .hero-manifesto {
       flex: 1;
-      font-size: 9.2px;
+      font-size: 13px;
       font-weight: 500;
-      letter-spacing: 0.13em;
-      text-transform: uppercase;
-      color: rgba(0,16,48,0.45);
-      line-height: 2.1;
-      max-width: 310px;
+      letter-spacing: -0.005em;
+      text-transform: none;
+      color: #525252;           /* Oncy-exact muted text colour */
+      line-height: 1.7;
+      max-width: 300px;
     }
     .hero-manifesto strong {
       font-weight: 700;
       color: rgba(0,16,48,0.65);
     }
 
-    /* Oval scroll button — Oncy: tall thin pill, chevron inside */
+    /* Oval scroll button — Oncy-exact: 52×185px, chevron anchored to bottom */
     .scroll-oval {
-      width: 40px; height: 76px;
-      border: 1.5px solid rgba(0,16,48,0.20);
-      border-radius: 100px;
-      display: flex; align-items: center; justify-content: center;
-      text-decoration: none; color: rgba(0,16,48,0.45);
+      width: 52px; height: 185px;
+      border: 1px solid #b0b0b0;  /* Oncy-exact border colour */
+      border-radius: 90px;
+      display: flex;
+      align-items: flex-end;      /* arrow sits at bottom */
+      justify-content: center;
+      padding: 0 0 40px;          /* Oncy-exact: 40px bottom padding */
+      text-decoration: none;
+      color: rgba(0,16,48,0.45);
       transition: border-color 0.2s, transform 0.2s, color 0.2s;
       flex-shrink: 0;
     }
@@ -818,7 +825,7 @@
       #work, #about, #contact { padding: 40px 22px; border-radius: 20px; margin-top: 8px; }
 
       .hero-meta { display: none; }
-      .hero-mid { flex-direction: column; align-items: flex-start; gap: 16px; }
+      .hero-mid { grid-template-columns: 1fr; gap: 16px; }
       .hero-pills-col { width: 100%; }
       .hero-pills-grid { grid-template-columns: 1fr 1fr; }
       .hero-title { padding: 16px 0; }
@@ -838,9 +845,23 @@
       .foot-links { flex-direction: column; gap: 10px; align-items: center; }
     }
 
+    @media (max-width: 768px) {
+      #nav {
+        top: 10px;
+        width: calc(100% - 20px);
+        height: 60px;
+        padding: 6px 6px 6px 18px;
+        border-radius: 60px;
+      }
+    }
     @media (max-width: 480px) {
-      #nav { padding: 12px 16px; }
-      #hero { padding: 76px 18px 32px; }
+      #nav {
+        top: 8px;
+        width: calc(100% - 16px);
+        height: 56px;
+        padding: 6px 6px 6px 16px;
+      }
+      #hero { padding: 84px 18px 32px; }
     }
   </style>
 </head>
@@ -949,10 +970,10 @@
 
       <div class="hero-pills-col">
         <div class="hero-pills-grid">
-          <span class="h-tag">Brand Strategy</span>
-          <span class="h-tag">Visual Identity</span>
-          <span class="h-tag">UI / UX Design</span>
-          <span class="h-tag">Motion &amp; Media</span>
+          <span class="h-tag"><span class="h-tag-dot"></span>Brand Strategy</span>
+          <span class="h-tag"><span class="h-tag-dot"></span>Visual Identity</span>
+          <span class="h-tag"><span class="h-tag-dot"></span>UI / UX Design</span>
+          <span class="h-tag"><span class="h-tag-dot"></span>Motion &amp; Media</span>
         </div>
       </div>
 
