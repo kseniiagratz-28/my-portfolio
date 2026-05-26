@@ -8,223 +8,258 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <!-- Inter (includes Display optical axis at large sizes) + Instrument Serif for italic accent -->
+  <!-- Inter (opsz axis = optical sizing ≈ Inter Display at large sizes) + Instrument Serif italic accent -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300..700;1,14..32,300..700&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
 
+  <!-- Inter Display woff2 files from Framer CDN (exact source Oncy uses) -->
   <style>
-    /* ── Tokens ─────────────────────────────────────────── */
+    @font-face{font-family:"Inter Display";font-style:normal;font-weight:500;font-display:swap;src:url("https://framerusercontent.com/assets/iwWTDc49ENF2tCHbqlNARXw6Ug.woff2") format("woff2");}
+    @font-face{font-family:"Inter Display";font-style:normal;font-weight:500;font-display:swap;src:url("https://framerusercontent.com/assets/r0mv3NegmA0akcQsNFotG32Las.woff2") format("woff2");unicode-range:U+0100-024F,U+0259,U+1E00-1EFF,U+2020,U+20A0-20AB,U+20AD-20CF,U+2113,U+2C60-2C7F,U+A720-A7FF;}
+  </style>
+
+  <style>
+    /* ── Tokens ─────────────────────────────────────────────── */
     :root {
-      --lime:    #DFFD58;
-      --black:   #0F0F0F;
-      --bg:      #EDE9DF;   /* warm cream — same family as Oncy */
-      --section: #F4F1E9;
-      --grey:    #6B6B6B;
-      --border:  rgba(0,0,0,0.12);
-      --card:    rgba(255,255,255,0.75);
+      --lime:   #f6ff2a;   /* Oncy exact */
+      --outer:  #0e0d0a;   /* Oncy outer page bg */
+      --white:  #ffffff;
+      --ink:    #0e0d0a;
+      --grey:   #777777;
+      --muted:  rgba(0,0,0,0.35);
+      --border: rgba(0,0,0,0.09);
+      --card-r: 28px;      /* white card border-radius */
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
 
     body {
-      background: var(--bg);
-      color: var(--black);
+      background: var(--outer);   /* ← DARK outer background, exactly like Oncy */
+      color: var(--ink);
       font-family: 'Inter', system-ui, sans-serif;
       font-optical-sizing: auto;
       -webkit-font-smoothing: antialiased;
       overflow-x: hidden;
     }
 
-    /* ══════════════════════════════════════════════════════
-       NAV  —  pill style, centered links, lime CTA
-    ══════════════════════════════════════════════════════ */
+
+    /* ══════════════════════════════════════════════════════════
+       NAV — floating fixed bar, individual pill items (Oncy-exact)
+    ══════════════════════════════════════════════════════════ */
     #nav {
       position: fixed;
-      inset: 0 0 auto 0;
-      z-index: 200;
-      padding: 16px 28px;
+      top: 0; left: 0; right: 0;
+      z-index: 300;
+      padding: 14px 24px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 16px;
+      gap: 12px;
+      /* Light blur bg — works over both white cards and dark outer */
+      background: rgba(255,255,255,0.82);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(0,0,0,0.07);
     }
 
+    /* Logo */
     .nav-logo {
-      font-family: 'Instrument Serif', serif;
-      font-style: italic;
-      font-size: 1.25rem;
-      color: var(--black);
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 14.5px;
+      letter-spacing: -0.025em;
+      color: var(--ink);
       text-decoration: none;
-      line-height: 1;
       flex-shrink: 0;
+      white-space: nowrap;
     }
 
-    /* Single pill that wraps all links */
+    /* ── Individual pill items (KEY Oncy structure) ── */
     .nav-links {
       display: flex;
       list-style: none;
-      gap: 2px;
-      background: rgba(255,255,255,0.72);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border: 1px solid rgba(255,255,255,0.95);
-      border-radius: 100px;
-      padding: 5px;
+      gap: 6px;
+      align-items: center;
     }
-    .nav-links a {
+    /* EACH item is its own bordered pill */
+    .nav-links li a {
       display: block;
-      padding: 7px 20px;
+      padding: 8px 20px;
       font-size: 13px;
       font-weight: 450;
-      color: var(--black);
+      color: var(--ink);
       text-decoration: none;
-      border-radius: 100px;
-      transition: background 0.2s;
+      border-radius: 90px;
+      border: 1px solid #d7d7d7;
+      background: transparent;
       white-space: nowrap;
+      transition: background 0.18s, color 0.18s;
     }
-    .nav-links a:hover { background: rgba(0,0,0,0.07); }
+    /* Active = dark fill (exactly Oncy) */
+    .nav-links li a.active,
+    .nav-links li a:hover {
+      background: var(--outer);
+      color: var(--white);
+      border-color: var(--outer);
+    }
 
     /* CTA pill */
     .nav-cta {
-      display: flex;
+      display: inline-flex;
       align-items: center;
       gap: 10px;
-      height: 44px;
-      padding: 0 8px 0 22px;
+      height: 40px;
+      padding: 0 8px 0 20px;
       background: var(--lime);
-      border-radius: 100px;
+      border-radius: 90px;
       font-size: 13px;
       font-weight: 500;
-      color: var(--black);
+      color: var(--ink);
       text-decoration: none;
       flex-shrink: 0;
-      transition: transform 0.2s, box-shadow 0.2s;
+      white-space: nowrap;
+      transition: transform 0.2s;
     }
-    .nav-cta:hover {
-      transform: scale(1.03);
-      box-shadow: 0 6px 24px rgba(223,253,88,0.35);
-    }
+    .nav-cta:hover { transform: scale(1.03); }
     .nav-cta-icon {
-      width: 30px; height: 30px;
-      background: var(--black);
+      width: 28px; height: 28px;
+      background: var(--ink);
       border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
-      color: white;
-      font-size: 15px;
-      line-height: 1;
+      color: var(--lime);
+      font-size: 13px; line-height: 1;
     }
 
-    /* Hamburger (mobile) */
+    /* Mobile hamburger */
     .nav-burger {
       display: none;
       flex-direction: column;
       gap: 5px;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 4px;
+      background: none; border: none;
+      cursor: pointer; padding: 4px;
     }
     .nav-burger span {
       display: block; width: 22px; height: 1.5px;
-      background: var(--black);
-      transition: transform 0.3s;
+      background: var(--ink);
+      transition: transform 0.25s;
     }
 
     /* Mobile overlay */
     #nav-overlay {
       display: none;
       position: fixed; inset: 0;
-      background: var(--bg);
-      z-index: 199;
+      background: var(--outer);
+      z-index: 299;
       flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 40px;
+      align-items: center; justify-content: center;
+      gap: 44px;
     }
     #nav-overlay.open { display: flex; }
     #nav-overlay a {
       font-family: 'Instrument Serif', serif;
       font-style: italic;
-      font-size: clamp(2.5rem, 10vw, 4rem);
-      color: var(--black);
+      font-size: clamp(2.4rem, 10vw, 3.8rem);
+      color: var(--white);
       text-decoration: none;
       transition: opacity 0.2s;
     }
     #nav-overlay a:hover { opacity: 0.4; }
 
 
-    /* ══════════════════════════════════════════════════════
-       HERO  —  full-height, cream + bokeh, edge-to-edge title
-    ══════════════════════════════════════════════════════ */
+    /* ══════════════════════════════════════════════════════════
+       PAGE WRAPPER — all sections are white cards on dark outer
+    ══════════════════════════════════════════════════════════ */
+    .page-cards {
+      padding: 0 14px 14px;   /* side + bottom dark border shows */
+    }
+
+
+    /* ══════════════════════════════════════════════════════════
+       HERO — white rounded card, full-height, soft bokeh bg
+    ══════════════════════════════════════════════════════════ */
     #hero {
-      min-height: 100svh;
       position: relative;
       overflow: hidden;
+      background: var(--white);
+      border-radius: var(--card-r);
+      min-height: calc(100svh - 14px);   /* accounts for bottom padding only */
       display: flex;
       flex-direction: column;
-      padding: 100px 40px 44px;
+      padding: 96px 44px 48px;
     }
 
-    /* Bokeh layer */
-    .hero-bg {
+    /* ── Bokeh / ambient light layer ─────────────────────── */
+    .hero-bokeh {
       position: absolute;
       inset: 0;
-      background: var(--bg);
-    }
-    .blob {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(100px);
+      border-radius: var(--card-r);
       pointer-events: none;
+      overflow: hidden;
     }
-    .b1 { width: 700px; height: 600px; background: rgba(160,196,255,0.5); top: -8%;  left: 22%; }
-    .b2 { width: 500px; height: 500px; background: rgba(140,228,170,0.45);top:  6%;  right:-4%; }
-    .b3 { width: 650px; height: 550px; background: rgba(255,198,140,0.4); bottom:-8%; left:32%; }
-    .b4 { width: 320px; height: 320px; background: rgba(220,170,255,0.35);top: 28%;  left: 4%; }
+    /* Soft blurred color blobs — exact Oncy bokeh feel */
+    .hero-bokeh::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 72% 55% at 18% 30%, rgba(168,210,255,0.55) 0%, transparent 65%),
+        radial-gradient(ellipse 60% 65% at 82% 18%, rgba(150,235,185,0.45) 0%, transparent 60%),
+        radial-gradient(ellipse 80% 55% at 55% 85%, rgba(255,210,155,0.40) 0%, transparent 60%),
+        radial-gradient(ellipse 45% 45% at 8%  70%, rgba(210,170,255,0.35) 0%, transparent 55%);
+    }
+    /* White veil so text stays readable */
+    .hero-bokeh::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(255,255,255,0.45);
+    }
 
-    /* Content */
+    /* Hero content */
     .hero-inner {
       position: relative; z-index: 1;
       display: flex; flex-direction: column;
       flex: 1; gap: 0;
     }
 
+    /* Top meta row */
     .hero-meta {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: auto;
-      padding-bottom: 16px;
+      padding-bottom: 12px;
     }
     .hero-clock {
-      font-size: 12px;
+      font-size: 11.5px;
       color: var(--grey);
       font-variant-numeric: tabular-nums;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.06em;
     }
     .hero-coord {
-      font-size: 11px;
-      letter-spacing: 0.16em;
+      font-size: 10.5px;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
       color: var(--grey);
     }
 
-    /* THE TITLE — JS sets font-size to fill viewport width exactly */
+    /* ── THE TITLE — JS scales this to fill full card width ── */
     .hero-title {
-      font-family: 'Inter', system-ui, sans-serif;
+      font-family: "Inter Display", 'Inter', system-ui, sans-serif;
       font-optical-sizing: auto;
       font-weight: 500;
       font-style: normal;
-      line-height: 0.87;
-      letter-spacing: -0.03em;
-      color: var(--black);
+      line-height: 0.85;
+      letter-spacing: -0.04em;
+      text-transform: uppercase;
+      color: var(--ink);
       white-space: nowrap;
       display: block;
       margin: auto 0;
-      padding: 24px 0;
-      font-size: 14vw; /* CSS fallback while JS runs */
+      padding: 20px 0;
+      font-size: 13vw; /* CSS fallback while JS loads */
     }
 
+    /* Bottom info row */
     .hero-bottom {
       display: flex;
       align-items: flex-end;
@@ -232,226 +267,238 @@
       gap: 24px;
       margin-top: auto;
     }
-    .hero-left {}
     .hero-tagline {
-      font-size: 11px;
+      font-size: 10.5px;
       font-weight: 500;
-      letter-spacing: 0.15em;
+      letter-spacing: 0.17em;
       text-transform: uppercase;
       color: var(--grey);
-      line-height: 1.8;
-      max-width: 300px;
+      line-height: 2;
+      max-width: 260px;
     }
-
     .hero-right {
       display: flex;
       flex-direction: column;
       align-items: flex-end;
-      gap: 16px;
+      gap: 14px;
     }
     .hero-tags {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
+      gap: 7px;
       justify-content: flex-end;
     }
     .h-tag {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      height: 30px;
+      height: 29px;
       padding: 0 14px;
-      border: 1px solid rgba(0,0,0,0.15);
+      border: 1px solid rgba(0,0,0,0.12);
       border-radius: 100px;
       font-size: 11.5px;
-      background: rgba(255,255,255,0.55);
+      background: rgba(255,255,255,0.6);
       backdrop-filter: blur(6px);
-      color: var(--black);
+      color: var(--ink);
       white-space: nowrap;
     }
-    .h-tag::before { content: '•'; font-size: 9px; color: var(--grey); }
+    .h-tag::before { content: '·'; font-size: 12px; color: var(--grey); }
 
-    /* Oval scroll button (like Oncy) */
+    /* Oval scroll button (Oncy detail) */
     .scroll-oval {
-      width: 48px; height: 72px;
-      border: 1.5px solid rgba(0,0,0,0.2);
+      width: 44px; height: 68px;
+      border: 1.5px solid rgba(0,0,0,0.18);
       border-radius: 100px;
       display: flex; align-items: center; justify-content: center;
-      text-decoration: none; color: var(--black);
+      text-decoration: none; color: var(--ink);
       transition: border-color 0.2s, transform 0.2s;
       flex-shrink: 0;
     }
-    .scroll-oval:hover { border-color: var(--black); transform: translateY(2px); }
+    .scroll-oval:hover { border-color: var(--ink); transform: translateY(3px); }
 
 
-    /* ══════════════════════════════════════════════════════
-       WORK  —  full-width image, info row, lime CTA
-    ══════════════════════════════════════════════════════ */
+    /* ══════════════════════════════════════════════════════════
+       WORK — white card, image fills top, info overlays bottom
+       EXACT Oncy project card pattern
+    ══════════════════════════════════════════════════════════ */
     #work {
-      background: var(--section);
-      padding: 100px 40px;
+      background: var(--white);
+      border-radius: var(--card-r);
+      padding: 52px 48px 40px;
+      margin-top: 14px;
     }
-    .work-inner { max-width: 1280px; margin: 0 auto; }
 
     .section-top {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 48px;
+      margin-bottom: 36px;
     }
     .s-label {
-      font-size: 11px;
+      font-size: 10.5px;
       font-weight: 500;
-      letter-spacing: 0.18em;
+      letter-spacing: 0.2em;
       text-transform: uppercase;
       color: var(--grey);
     }
-    .s-count { font-size: 13px; color: var(--grey); }
+    .s-count { font-size: 12px; color: var(--grey); }
 
-    /* Project block */
+    /* ── Project card ── */
     .proj {
-      margin-bottom: 20px;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      margin-bottom: 12px;
+      background: #f8f8f6;
     }
 
-    .proj-img {
+    /* Image wrapper with dark gradient overlay at bottom */
+    .proj-img-wrap {
+      position: relative;
       width: 100%;
       aspect-ratio: 16 / 7.5;
-      border-radius: 20px;
       overflow: hidden;
-      background: #DDD9CF;
-      margin-bottom: 28px;
     }
-    .proj-img img {
+    .proj-img-wrap img {
       width: 100%; height: 100%;
       object-fit: cover;
       object-position: center top;
-      transition: transform 0.7s ease;
+      display: block;
+      transition: transform 0.8s cubic-bezier(0.25,0.46,0.45,0.94);
     }
-    .proj:hover .proj-img img { transform: scale(1.025); }
+    .proj:hover .proj-img-wrap img { transform: scale(1.03); }
 
-    .proj-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 48px;
-      margin-bottom: 24px;
-      align-items: start;
+    /* ── Info overlay at BOTTOM of image (exact Oncy) ── */
+    .proj-overlay {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 28px 28px 24px;
+      background: linear-gradient(to top,
+        rgba(12,12,10,0.72) 0%,
+        rgba(12,12,10,0.30) 55%,
+        transparent 100%
+      );
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 16px;
     }
-    .proj-left {}
     .proj-name {
-      font-size: clamp(2.2rem, 4.5vw, 4rem);
-      font-weight: 500;
-      letter-spacing: -0.025em;
-      line-height: 1;
+      font-family: "Inter Display", 'Inter', sans-serif;
       font-optical-sizing: auto;
-      color: var(--black);
-      margin-bottom: 10px;
+      font-size: clamp(1.8rem, 3.5vw, 3rem);
+      font-weight: 500;
+      letter-spacing: -0.03em;
+      line-height: 1;
+      color: #fff;
+      margin-bottom: 5px;
     }
     .proj-cats {
-      font-size: 13px;
-      color: var(--grey);
+      font-size: 12px;
+      color: rgba(255,255,255,0.6);
+      letter-spacing: 0.01em;
     }
-
-    .proj-right {}
     .proj-pills {
-      display: flex; flex-wrap: wrap; gap: 8px;
-      margin-bottom: 14px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      justify-content: flex-end;
+      flex-shrink: 0;
     }
     .proj-pill {
-      height: 28px; padding: 0 14px;
-      border: 1px solid rgba(0,0,0,0.12);
+      height: 27px; padding: 0 13px;
+      border: 1px solid rgba(255,255,255,0.22);
       border-radius: 100px;
-      font-size: 12px;
+      font-size: 11.5px;
       display: inline-flex; align-items: center;
-      background: white;
-      color: var(--black);
-    }
-    .proj-desc {
-      font-size: 14px;
-      color: var(--grey);
-      line-height: 1.7;
+      background: rgba(255,255,255,0.10);
+      backdrop-filter: blur(8px);
+      color: rgba(255,255,255,0.9);
+      white-space: nowrap;
     }
 
-    /* FULL-WIDTH lime CTA — exact Oncy pattern */
+    /* ── Lime CTA at bottom of card (exact Oncy) ── */
+    .proj-cta-wrap {
+      padding: 14px 16px;
+    }
     .proj-cta {
       display: flex;
       align-items: center;
       justify-content: space-between;
       width: 100%;
-      height: 68px;
-      padding: 0 24px 0 32px;
+      height: 60px;
+      padding: 0 16px 0 28px;
       background: var(--lime);
       border-radius: 100px;
       text-decoration: none;
-      color: var(--black);
-      font-size: 15px;
+      color: var(--ink);
+      font-size: 14.5px;
       font-weight: 500;
-      letter-spacing: 0.01em;
-      transition: transform 0.25s, box-shadow 0.25s;
+      letter-spacing: 0.005em;
+      transition: transform 0.22s, box-shadow 0.22s;
     }
     .proj-cta:hover {
       transform: translateY(-2px);
-      box-shadow: 0 12px 40px rgba(223,253,88,0.4);
+      box-shadow: 0 14px 48px rgba(246,255,42,0.32);
     }
     .proj-cta-arrow {
-      width: 40px; height: 40px;
-      background: var(--black);
+      width: 38px; height: 38px;
+      background: var(--ink);
       border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
-      color: white;
-      font-size: 18px;
+      color: var(--lime);
+      font-size: 16px;
       flex-shrink: 0;
     }
 
-    /* Coming soon strip */
+    /* Coming soon placeholder */
     .proj-soon {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 36px 40px;
-      border: 1px solid rgba(0,0,0,0.1);
-      border-radius: 20px;
-      margin-top: 16px;
-      background: rgba(255,255,255,0.4);
+      padding: 30px 36px;
+      border: 1px solid rgba(0,0,0,0.07);
+      border-radius: 18px;
+      margin-top: 12px;
+      background: rgba(255,255,255,0.5);
     }
     .proj-soon-label {
       font-family: 'Instrument Serif', serif;
       font-style: italic;
-      font-size: 1.6rem;
-      color: #AAAAAA;
+      font-size: 1.5rem;
+      color: #C0C0C0;
     }
-    .proj-soon-dot {
-      width: 10px; height: 10px;
-      border-radius: 50%;
-      background: #CCCCCC;
-    }
+    .proj-soon-dot { width: 9px; height: 9px; border-radius: 50%; background: #D0D0D0; }
 
 
-    /* ══════════════════════════════════════════════════════
-       ABOUT
-    ══════════════════════════════════════════════════════ */
+    /* ══════════════════════════════════════════════════════════
+       ABOUT — white card
+    ══════════════════════════════════════════════════════════ */
     #about {
-      background: var(--bg);
-      padding: 100px 40px;
+      background: var(--white);
+      border-radius: var(--card-r);
+      padding: 52px 48px 52px;
+      margin-top: 14px;
     }
-    .about-inner { max-width: 1280px; margin: 0 auto; }
 
     .about-grid {
       display: grid;
-      grid-template-columns: 1fr 1.1fr;
+      grid-template-columns: 1fr 1.15fr;
       gap: 80px;
-      margin-top: 56px;
+      margin-top: 44px;
       align-items: start;
     }
     .about-bio {
-      font-size: 1.05rem;
-      line-height: 1.8;
-      color: var(--black);
+      font-size: 1rem;
+      line-height: 1.85;
+      color: var(--ink);
     }
-    .about-bio p + p { margin-top: 1.3rem; }
+    .about-bio p + p { margin-top: 1.2rem; }
+    .about-bio em { font-style: italic; }
 
     .skills-head {
-      font-size: 11px; font-weight: 500;
-      letter-spacing: 0.18em; text-transform: uppercase;
+      font-size: 10.5px; font-weight: 500;
+      letter-spacing: 0.2em; text-transform: uppercase;
       color: var(--grey); margin-bottom: 14px;
     }
     .skills-row {
@@ -459,52 +506,55 @@
       margin-bottom: 44px;
     }
     .sk {
-      height: 30px; padding: 0 14px;
-      border: 1px solid rgba(0,0,0,0.12);
+      height: 30px; padding: 0 15px;
+      border: 1px solid rgba(0,0,0,0.10);
       border-radius: 100px;
       font-size: 12px;
       display: inline-flex; align-items: center;
-      background: rgba(255,255,255,0.7);
-      color: var(--black);
-      transition: background 0.2s;
+      background: #fafaf8;
+      color: var(--ink);
+      transition: background 0.18s;
+      cursor: default;
     }
     .sk:hover { background: var(--lime); }
 
-    .edu { border-top: 1px solid rgba(0,0,0,0.1); padding-top: 28px; }
+    .edu { border-top: 1px solid rgba(0,0,0,0.08); padding-top: 28px; }
     .edu-row {
       display: flex; gap: 20px;
-      padding: 18px 0;
-      border-bottom: 1px solid rgba(0,0,0,0.07);
+      padding: 16px 0;
+      border-bottom: 1px solid rgba(0,0,0,0.06);
     }
-    .edu-yr { font-size: 12px; color: var(--grey); min-width: 130px; padding-top: 2px; }
-    .edu-role { font-size: 14px; font-weight: 500; color: var(--black); }
+    .edu-yr { font-size: 12px; color: var(--grey); min-width: 140px; padding-top: 2px; flex-shrink: 0; }
+    .edu-role { font-size: 14px; font-weight: 500; color: var(--ink); }
     .edu-place { font-size: 12px; color: var(--grey); margin-top: 3px; }
 
 
-    /* ══════════════════════════════════════════════════════
-       CONTACT  —  dark section
-    ══════════════════════════════════════════════════════ */
+    /* ══════════════════════════════════════════════════════════
+       CONTACT — white rounded card + footer inside (Oncy footer card)
+    ══════════════════════════════════════════════════════════ */
     #contact {
-      background: var(--black);
-      padding: 130px 40px 110px;
+      background: var(--white);
+      border-radius: var(--card-r);
+      padding: 100px 48px 52px;
+      margin-top: 14px;
       text-align: center;
     }
-    .contact-inner { max-width: 1280px; margin: 0 auto; }
+    .contact-inner { max-width: 860px; margin: 0 auto; }
 
     .contact-hl {
-      font-family: 'Inter', system-ui, sans-serif;
+      font-family: "Inter Display", 'Inter', system-ui, sans-serif;
       font-optical-sizing: auto;
-      font-size: clamp(3rem, 8.5vw, 7.5rem);
+      font-size: clamp(2.6rem, 7vw, 6.5rem);
       font-weight: 500;
-      letter-spacing: -0.03em;
+      letter-spacing: -0.04em;
       line-height: 0.9;
-      color: #fff;
+      color: var(--ink);
       margin-bottom: 52px;
     }
     .contact-hl em {
       font-family: 'Instrument Serif', serif;
       font-style: italic;
-      color: var(--lime);
+      color: var(--grey);
     }
 
     .contact-btn {
@@ -512,170 +562,160 @@
       align-items: center;
       gap: 10px;
       height: 52px;
-      padding: 0 8px 0 24px;
+      padding: 0 8px 0 26px;
       background: var(--lime);
       border-radius: 100px;
       font-size: 14px;
       font-weight: 500;
-      color: var(--black);
+      color: var(--ink);
       text-decoration: none;
       transition: transform 0.2s, box-shadow 0.2s;
     }
     .contact-btn:hover {
       transform: scale(1.03);
-      box-shadow: 0 8px 32px rgba(223,253,88,0.3);
+      box-shadow: 0 10px 36px rgba(246,255,42,0.3);
     }
     .contact-btn-icon {
       width: 36px; height: 36px;
-      background: var(--black);
+      background: var(--ink);
       border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
-      color: white; font-size: 16px;
+      color: var(--lime); font-size: 15px;
     }
 
-    .contact-links {
-      display: flex; align-items: center;
-      justify-content: center;
-      gap: 24px; margin-top: 36px;
-    }
-    .contact-link {
-      font-size: 13px;
-      color: rgba(255,255,255,0.35);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-    .contact-link:hover { color: #fff; }
-    .contact-sep { color: rgba(255,255,255,0.12); }
-
-
-    /* ══════════════════════════════════════════════════════
-       FOOTER
-    ══════════════════════════════════════════════════════ */
-    footer {
-      background: var(--black);
-      padding: 24px 40px;
-      border-top: 1px solid rgba(255,255,255,0.07);
+    /* Footer row inside the contact card */
+    .contact-foot {
+      margin-top: 72px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(0,0,0,0.08);
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
-    .foot-copy { font-size: 12px; color: rgba(255,255,255,0.22); }
-    .foot-links { display: flex; gap: 24px; }
+    .foot-copy { font-size: 12px; color: rgba(0,0,0,0.28); }
+    .foot-links { display: flex; gap: 22px; }
     .foot-link {
-      font-size: 12px; color: rgba(255,255,255,0.22);
+      font-size: 12px; color: rgba(0,0,0,0.28);
       text-decoration: none; transition: color 0.2s;
     }
-    .foot-link:hover { color: rgba(255,255,255,0.6); }
+    .foot-link:hover { color: var(--ink); }
 
 
-    /* ══════════════════════════════════════════════════════
+    /* ══════════════════════════════════════════════════════════
        SCROLL REVEAL
-    ══════════════════════════════════════════════════════ */
-    .reveal {
-      opacity: 0;
-      transform: translateY(28px);
-      transition: opacity 0.65s ease, transform 0.65s ease;
-    }
+    ══════════════════════════════════════════════════════════ */
+    .reveal { opacity: 0; transform: translateY(26px); transition: opacity 0.6s ease, transform 0.6s ease; }
     .reveal.in { opacity: 1; transform: translateY(0); }
-    .d1 { transition-delay: 0.1s; }
-    .d2 { transition-delay: 0.2s; }
-    .d3 { transition-delay: 0.3s; }
+    .d1 { transition-delay: 0.10s; }
+    .d2 { transition-delay: 0.20s; }
+    .d3 { transition-delay: 0.30s; }
 
 
-    /* ══════════════════════════════════════════════════════
+    /* ══════════════════════════════════════════════════════════
        RESPONSIVE
-    ══════════════════════════════════════════════════════ */
-    @media (max-width: 1024px) {
-      #hero { padding: 88px 32px 40px; }
-      #work, #about, #contact { padding: 80px 32px; }
-      .proj-row { grid-template-columns: 1fr; gap: 24px; }
-      .about-grid { grid-template-columns: 1fr; gap: 52px; }
+    ══════════════════════════════════════════════════════════ */
+    @media (max-width: 1080px) {
+      .page-cards { padding: 0 10px 10px; }
+      #hero { padding: 90px 32px 44px; }
+      #work, #about, #contact { padding-left: 32px; padding-right: 32px; }
+      .about-grid { gap: 52px; }
     }
 
     @media (max-width: 768px) {
       .nav-links, .nav-cta { display: none; }
       .nav-burger { display: flex; }
 
-      #hero { padding: 80px 24px 36px; }
-      #work, #about, #contact { padding: 64px 24px; }
+      .page-cards { padding: 0 8px 8px; }
+      #hero { padding: 80px 22px 36px; border-radius: 20px; }
+      #work, #about, #contact { padding: 40px 22px; border-radius: 20px; margin-top: 8px; }
 
       .hero-meta { display: none; }
-      .hero-bottom { flex-direction: column; align-items: flex-start; gap: 20px; }
+      .hero-title { padding: 16px 0; }
+      .hero-bottom { flex-direction: column; align-items: flex-start; gap: 18px; }
       .hero-right { align-items: flex-start; }
       .hero-tags { justify-content: flex-start; }
 
-      .proj-soon { padding: 28px 24px; }
-      .contact-links { flex-direction: column; gap: 12px; }
-      .contact-sep { display: none; }
-      footer { flex-direction: column; gap: 14px; text-align: center; }
+      .proj-overlay { flex-direction: column; align-items: flex-start; }
+      .proj-pills { justify-content: flex-start; }
+
+      .about-grid { grid-template-columns: 1fr; gap: 44px; }
+      .contact-foot { flex-direction: column; gap: 14px; text-align: center; }
+      .foot-links { flex-direction: column; gap: 10px; align-items: center; }
     }
 
     @media (max-width: 480px) {
-      #nav { padding: 14px 20px; }
-      #hero, #work, #about, #contact { padding-left: 20px; padding-right: 20px; }
+      #nav { padding: 12px 16px; }
+      #hero { padding: 76px 18px 32px; }
     }
   </style>
 </head>
 <body>
 
-<!-- ░░░░░░░░░░ NAV ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ -->
+<!-- ░░░░░░░░░░ NAV ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ -->
 <nav id="nav">
-  <a href="#" class="nav-logo">KG</a>
 
+  <a href="#" class="nav-logo">Ksenia Gratz</a>
+
+  <!-- Mobile burger -->
   <button class="nav-burger" id="burger" aria-label="Open menu" aria-expanded="false">
     <span></span><span></span><span></span>
   </button>
 
+  <!-- Individual pill items — exact Oncy nav structure -->
   <ul class="nav-links" role="list">
-    <li><a href="#work">Work</a></li>
+    <li><a href="#work" class="active">Work</a></li>
     <li><a href="#about">About</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
 
-  <a href="#contact" class="nav-cta">
+  <a href="mailto:gratz.ksenia@gmail.com" class="nav-cta">
     Get in Touch
     <span class="nav-cta-icon">→</span>
   </a>
+
 </nav>
 
-<!-- Mobile overlay -->
-<div id="nav-overlay" role="dialog" aria-label="Navigation menu">
+<!-- Mobile full-screen overlay -->
+<div id="nav-overlay" role="dialog" aria-label="Navigation">
   <a href="#work">Work</a>
   <a href="#about">About</a>
   <a href="#contact">Contact</a>
 </div>
 
 
-<!-- ░░░░░░░░░░ HERO ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ -->
+<!-- ════════════════════════════════════════════════════════
+     ALL SECTIONS = WHITE CARDS on dark outer bg (#0e0d0a)
+     ════════════════════════════════════════════════════════ -->
+<div class="page-cards">
+
+
+<!-- ░░░░░░░░░░ HERO ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ -->
 <section id="hero">
 
-  <!-- Bokeh background blobs -->
-  <div class="hero-bg" aria-hidden="true">
-    <div class="blob b1"></div>
-    <div class="blob b2"></div>
-    <div class="blob b3"></div>
-    <div class="blob b4"></div>
-  </div>
+  <!-- Soft bokeh ambient layer (inside white card) -->
+  <div class="hero-bokeh" aria-hidden="true"></div>
 
   <div class="hero-inner">
 
-    <!-- Top meta row -->
+    <!-- Top meta: clock + location -->
     <div class="hero-meta">
       <span class="hero-clock" id="clock">—</span>
       <span class="hero-coord">47.75°N · SINGEN, DE</span>
     </div>
 
-    <!-- TITLE — fills full width via JS -->
+    <!-- ── THE NAME — JS scales to fill exact card width ── -->
     <h1 class="hero-title" id="heroTitle">KSENIA GRATZ</h1>
 
-    <!-- Bottom row -->
+    <!-- Bottom row: tagline left · tags + scroll oval right -->
     <div class="hero-bottom">
+
       <div class="hero-left">
         <p class="hero-tagline">
           PRODUCT DESIGNER · UX/UI<br>
           MOTION &amp; 3D · BRAND IDENTITY
         </p>
       </div>
+
       <div class="hero-right">
         <div class="hero-tags">
           <span class="h-tag">UX / UI Design</span>
@@ -685,132 +725,135 @@
         </div>
         <a href="#work" class="scroll-oval" aria-label="Scroll to work">
           <svg width="14" height="20" viewBox="0 0 14 20" fill="none" aria-hidden="true">
-            <line x1="7" y1="1" x2="7" y2="19" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
-            <polyline points="2,13 7,19 12,13" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+            <line x1="7" y1="1" x2="7" y2="19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <polyline points="2,13 7,19 12,13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </a>
       </div>
+
     </div>
 
   </div>
 </section>
+<!-- ░░░░░░ end hero ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ -->
 
 
-<!-- ░░░░░░░░░░ WORK ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ -->
+<!-- ░░░░░░░░░░ WORK ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ -->
 <section id="work">
-  <div class="work-inner">
 
-    <div class="section-top">
-      <span class="s-label">Selected Work</span>
-      <span class="s-count">01 / 01</span>
+  <div class="section-top">
+    <span class="s-label">Selected Work</span>
+    <span class="s-count">01 / 01</span>
+  </div>
+
+  <!-- ── FEEDO project card ── -->
+  <div class="proj reveal">
+
+    <!-- Full-width image with info overlaid at bottom (exact Oncy) -->
+    <div class="proj-img-wrap">
+      <img
+        src="images/feedo_hero_splash.JPG"
+        alt="Feedo — pet food delivery app redesign"
+        loading="lazy"
+      >
+      <!-- Project info floating over bottom of image -->
+      <div class="proj-overlay">
+        <div>
+          <h2 class="proj-name">Feedo</h2>
+          <p class="proj-cats">UX / UI Design &nbsp;·&nbsp; Product Design &nbsp;·&nbsp; Mobile App</p>
+        </div>
+        <div class="proj-pills">
+          <span class="proj-pill">+25% Conversion</span>
+          <span class="proj-pill">80% Retention</span>
+          <span class="proj-pill">2025</span>
+        </div>
+      </div>
     </div>
 
-    <!-- ── FEEDO ─────────────────────────────────────── -->
-    <div class="proj reveal">
-
-      <div class="proj-img">
-        <img
-          src="images/feedo_hero_splash.JPG"
-          alt="Feedo — pet food delivery app redesign"
-          loading="lazy"
-        >
-      </div>
-
-      <div class="proj-row">
-        <div class="proj-left">
-          <h2 class="proj-name">Feedo</h2>
-          <p class="proj-cats">UX / UI Design &nbsp;·&nbsp; Product Design &nbsp;·&nbsp; Mobile</p>
-        </div>
-        <div class="proj-right">
-          <div class="proj-pills">
-            <span class="proj-pill">+25% Conversion</span>
-            <span class="proj-pill">80% Retention</span>
-            <span class="proj-pill">2025</span>
-          </div>
-          <p class="proj-desc">
-            A mobile app redesign for pet food delivery — reducing drop-off,
-            streamlining onboarding, and building trust through transparent UX patterns.
-          </p>
-        </div>
-      </div>
-
+    <!-- Lime CTA at bottom of card (exact Oncy) -->
+    <div class="proj-cta-wrap">
       <a href="feedo.html" class="proj-cta">
         <span>View Case Study</span>
         <span class="proj-cta-arrow">→</span>
       </a>
-
-    </div>
-    <!-- ─────────────────────────────────────────────── -->
-
-    <div class="proj-soon reveal d1">
-      <span class="proj-soon-label">Next project — coming soon</span>
-      <span class="proj-soon-dot"></span>
     </div>
 
   </div>
+  <!-- ── end feedo ── -->
+
+  <!-- Placeholder for next project -->
+  <div class="proj-soon reveal d1">
+    <span class="proj-soon-label">Next project — coming soon</span>
+    <span class="proj-soon-dot"></span>
+  </div>
+
 </section>
+<!-- ░░░░░░ end work ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ -->
 
 
-<!-- ░░░░░░░░░░ ABOUT ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ -->
+<!-- ░░░░░░░░░░ ABOUT ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ -->
 <section id="about">
-  <div class="about-inner">
-    <span class="s-label">About</span>
 
-    <div class="about-grid">
+  <span class="s-label">About</span>
 
-      <div class="about-bio reveal">
-        <p>
-          Multimedia Designer with over&nbsp;7&nbsp;years of solid experience in
-          visual design for print, digital, and motion graphics. Recently upskilled
-          into Product Design, focusing on responsive web design, user-centered
-          layouts, and creating interactive prototypes.
-        </p>
-        <p>
-          Driven by crafting clear, well-thought-out digital solutions with a
-          strong visual and user experience impact. Currently completing the
-          <em>Digital&nbsp;Leute</em> Product Design Bootcamp in Germany.
-        </p>
+  <div class="about-grid">
+
+    <div class="about-bio reveal">
+      <p>
+        Multimedia Designer with over&nbsp;7&nbsp;years of solid experience in
+        visual design for print, digital, and motion graphics. Recently upskilled
+        into Product Design, focusing on responsive web design, user-centered
+        layouts, and creating interactive prototypes.
+      </p>
+      <p>
+        Driven by crafting clear, well-thought-out digital solutions with a
+        strong visual and user experience impact. Currently completing the
+        <em>Digital&nbsp;Leute</em> Product Design Bootcamp in Germany.
+      </p>
+    </div>
+
+    <div class="reveal d1">
+
+      <p class="skills-head">Skills &amp; Tools</p>
+      <div class="skills-row">
+        <span class="sk">Figma</span>
+        <span class="sk">Adobe XD</span>
+        <span class="sk">After Effects</span>
+        <span class="sk">Cinema 4D</span>
+        <span class="sk">UX Research</span>
+        <span class="sk">Wireframing</span>
+        <span class="sk">Prototyping</span>
+        <span class="sk">Motion Design</span>
+        <span class="sk">Brand Identity</span>
+        <span class="sk">AI-assisted Design</span>
       </div>
 
-      <div class="reveal d1">
-        <p class="skills-head">Skills &amp; Tools</p>
-        <div class="skills-row">
-          <span class="sk">Figma</span>
-          <span class="sk">Adobe XD</span>
-          <span class="sk">After Effects</span>
-          <span class="sk">Cinema 4D</span>
-          <span class="sk">UX Research</span>
-          <span class="sk">Wireframing</span>
-          <span class="sk">Prototyping</span>
-          <span class="sk">Motion Design</span>
-          <span class="sk">Brand Identity</span>
-          <span class="sk">AI-assisted Design</span>
-        </div>
-
-        <div class="edu">
-          <div class="edu-row">
-            <span class="edu-yr">02 / 2026 – 05 / 2026</span>
-            <div>
-              <p class="edu-role">Product Design Bootcamp</p>
-              <p class="edu-place">Digital Leute, Germany</p>
-            </div>
+      <div class="edu">
+        <div class="edu-row">
+          <span class="edu-yr">02 / 2026 – 05 / 2026</span>
+          <div>
+            <p class="edu-role">Product Design Bootcamp</p>
+            <p class="edu-place">Digital Leute, Germany</p>
           </div>
-          <div class="edu-row">
-            <span class="edu-yr">7+ years</span>
-            <div>
-              <p class="edu-role">Multimedia Design</p>
-              <p class="edu-place">Print · Digital · Motion · 3D</p>
-            </div>
+        </div>
+        <div class="edu-row">
+          <span class="edu-yr">7+ years</span>
+          <div>
+            <p class="edu-role">Multimedia Design</p>
+            <p class="edu-place">Print · Digital · Motion · 3D</p>
           </div>
         </div>
       </div>
 
     </div>
+
   </div>
+
 </section>
+<!-- ░░░░░░ end about ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ -->
 
 
-<!-- ░░░░░░░░░░ CONTACT ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ -->
+<!-- ░░░░░░░░░░ CONTACT + FOOTER ░░░░░░░░░░░░░░░░░░░░░░░░ -->
 <section id="contact">
   <div class="contact-inner">
 
@@ -823,64 +866,82 @@
       <span class="contact-btn-icon">→</span>
     </a>
 
-    <div class="contact-links reveal d2">
-      <a href="mailto:gratz.ksenia@gmail.com" class="contact-link">gratz.ksenia@gmail.com</a>
-      <span class="contact-sep">—</span>
-      <a href="https://linkedin.com/in/ksenia-gratz-9b8681188/" target="_blank" rel="noopener" class="contact-link">LinkedIn ↗</a>
+    <!-- Footer lives inside the last card (like Oncy) -->
+    <div class="contact-foot reveal d2">
+      <span class="foot-copy">© 2026 Ksenia Gratz</span>
+      <div class="foot-links">
+        <a href="mailto:gratz.ksenia@gmail.com" class="foot-link">gratz.ksenia@gmail.com</a>
+        <a href="https://linkedin.com/in/ksenia-gratz-9b8681188/" target="_blank" rel="noopener" class="foot-link">LinkedIn ↗</a>
+      </div>
     </div>
 
   </div>
 </section>
+<!-- ░░░░░░ end contact ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ -->
 
 
-<!-- ░░░░░░░░░░ FOOTER ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ -->
-<footer>
-  <span class="foot-copy">© 2026 Ksenia Gratz</span>
-  <div class="foot-links">
-    <a href="mailto:gratz.ksenia@gmail.com" class="foot-link">Email</a>
-    <a href="https://linkedin.com/in/ksenia-gratz-9b8681188/" target="_blank" rel="noopener" class="foot-link">LinkedIn</a>
-  </div>
-</footer>
+</div><!-- /.page-cards -->
 
 
 <script>
-/* ── Live Clock ─────────────────────────────── */
+/* ── Live clock ──────────────────────────────────── */
 function tick() {
   const d = new Date();
   const t = [d.getHours(), d.getMinutes(), d.getSeconds()]
     .map(n => String(n).padStart(2,'0')).join(':');
-  document.getElementById('clock').textContent = t + ' CET';
+  const el = document.getElementById('clock');
+  if (el) el.textContent = t + ' CET';
 }
 tick(); setInterval(tick, 1000);
 
-/* ── Fit title to fill full viewport width ──── */
+
+/* ── Fit title to fill card width exactly ────────── */
 function fitTitle() {
-  const el = document.getElementById('heroTitle');
-  if (!el) return;
-  const pad = parseFloat(getComputedStyle(document.getElementById('hero')).paddingLeft) * 2;
-  const maxW = window.innerWidth - pad;
-  // Set a large reference size, measure, then scale proportionally
+  const hero = document.getElementById('hero');
+  const el   = document.getElementById('heroTitle');
+  if (!hero || !el) return;
+  const style  = getComputedStyle(hero);
+  const padLR  = parseFloat(style.paddingLeft) + parseFloat(style.paddingRight);
+  const maxW   = hero.clientWidth - padLR;
+  // Set large ref size, then scale proportionally
   el.style.fontSize = '200px';
-  // Double rAF: first flushes style, second reads layout
+  // Double rAF: first flush styles, second reads layout
   requestAnimationFrame(() => requestAnimationFrame(() => {
     const sw = el.scrollWidth;
     if (!sw) { setTimeout(fitTitle, 80); return; }
-    el.style.fontSize = Math.floor(200 * maxW / sw * 0.992) + 'px';
+    el.style.fontSize = Math.floor(200 * maxW / sw * 0.994) + 'px';
   }));
 }
-// Fire on every possible load event to handle font timing
 document.addEventListener('DOMContentLoaded', () => setTimeout(fitTitle, 80));
-window.addEventListener('load', () => { fitTitle(); setTimeout(fitTitle, 400); });
+window.addEventListener('load', () => { fitTitle(); setTimeout(fitTitle, 380); });
 if (document.fonts) document.fonts.ready.then(() => setTimeout(fitTitle, 60));
-window.addEventListener('resize', fitTitle);
+window.addEventListener('resize', fitTitle, { passive: true });
 
-/* ── Mobile nav ─────────────────────────────── */
+
+/* ── Active nav link on scroll ───────────────────── */
+const navAnchors = document.querySelectorAll('.nav-links a');
+const sections   = document.querySelectorAll('section[id]');
+
+function updateNav() {
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY + 90 >= s.offsetTop) current = s.id;
+  });
+  navAnchors.forEach(a => {
+    a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+  });
+}
+window.addEventListener('scroll', updateNav, { passive: true });
+updateNav();
+
+
+/* ── Mobile nav ──────────────────────────────────── */
 const burger  = document.getElementById('burger');
 const overlay = document.getElementById('nav-overlay');
 
 burger.addEventListener('click', () => {
   const open = overlay.classList.toggle('open');
-  burger.setAttribute('aria-expanded', open);
+  burger.setAttribute('aria-expanded', String(open));
   document.body.style.overflow = open ? 'hidden' : '';
 });
 overlay.querySelectorAll('a').forEach(a =>
@@ -891,10 +952,13 @@ overlay.querySelectorAll('a').forEach(a =>
   })
 );
 
-/* ── Scroll reveal ───────────────────────────── */
-const io = new IntersectionObserver(entries =>
-  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }),
-  { threshold: 0.1 }
+
+/* ── Scroll reveal ───────────────────────────────── */
+const io = new IntersectionObserver(
+  entries => entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+  }),
+  { threshold: 0.08 }
 );
 document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 </script>
